@@ -1,0 +1,46 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+
+<div class="container ">
+    <div class="row ">
+        <!-- loop over the items in watch list -->
+        {% for item in items %}
+        <div class="col-4">
+            <div class="card mb-4 shadow ">
+                <a href="">
+
+
+                    <img class="card-img-top img-thumbnail" src="{{ item.image_url }}" alt="{{ auction.title }} photo">
+
+
+                    <div class="card-body">
+                        <h5 class="card-title"> {{ item.title }} </h5>
+                        <div>
+                            <strong>Price:</strong> {{item.starting_bid}} $
+                        </div>
+                        <div class="mb-2">
+                            <strong>Category:</strong> {{item.get_category_display}}
+                        </div>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <!-- this button given a item.id value -->
+                            <!-- so we will grap this value from the request.POST and delete the 
+                            watchlist item with this id because the value will sent with request-->
+                            <button name="id" class="btn btn-primary" type="submit" value={{item.id}}>Remove</button>
+
+                        </form>
+
+                    </div>
+
+            </div>
+        </div>
+
+        {%endfor%}
+
+    </div>
+</div>
+
+
+{% endblock %}
