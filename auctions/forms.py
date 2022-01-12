@@ -1,9 +1,10 @@
-from django.forms import *
+from django import forms
+from django.forms.fields import DecimalField
 
 from .models import *
 
 
-class AuctionForm(ModelForm):
+class AuctionForm(forms.ModelForm):
 
     class Meta:
         model = Auction
@@ -11,9 +12,9 @@ class AuctionForm(ModelForm):
                   'category', 'starting_bid', 'image_url']
 
 
-class BidForm(ModelForm):
+class BidForm(forms.ModelForm):
     class Meta:
         model = Bid
         fields = ['amount']
-        widgtes = {'amount': DecimalField(
-            attrs={'class': 'form-control'})}
+        widgets = {'amount':
+                   forms.TextInput(attrs={'class': 'form-control'})}

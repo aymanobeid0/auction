@@ -37,8 +37,8 @@ class Bid(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return f"{self.user} bid {self.amount} $ on {self.auction}"
+    # def __str__(self):
+    #     return f"{self.user} bid {self.amount} $ on {self.auction}"
 
 
 class Comment(models.Model):

@@ -87,18 +87,48 @@ def listing_page(request, auction_id):
     # Todo:
     # bid form
     # user checking
+    form = BidForm()
     auction = Auction.objects.get(id=auction_id)
+    last_bid = Bid.objects.last()
+
     if request.method == 'POST':
 
-        if auction.iswatch:
-            message = 'already watched'
-            return render(request, 'auctions/listing_page.html', {'auction': auction, 'message': message})
+        if 'watch' in request.POST:
+            if auction.iswatch:
+                message = 'already watched'
+                return render(request, 'auctions/listing_page.html',
+                              {'auction': auction, 'message': message, 'form': form})
 
-        else:
             auction.iswatch = True
             auction.save()
 
-    return render(request, 'auctions/listing_page.html', {'auction': auction})
+        else:
+            form = BidForm(request.POST)
+            if form.is_valid():
+
+                bid = form.save(commit=False)
+                bid.user = request.user
+                bid.auction = auction
+                # parentheese for checking one of the two conditions
+
+                if bid.amount > auction.starting_bid and (last_bid is None or bid.amount > last_bid.amount):
+                    print(last_bid.amount)
+                    bid.save()
+                # # print(last_bid.amount)
+                # # print(bid.amount)
+                # if last_bid != None and bid.amount > last_bid.amount and bid.amount > auction.Starting_bid:
+                #     bid.save()
+                # elif bid.amount > auction.starting_bid:
+                #     print(bid.amount)
+                #     print(auction.starting_bid)
+                #     bid.save()
+                else:
+
+                    message = f'your bid must be higher'
+
+                    return render(request, 'auctions/listing_page.html', {'auction': auction, 'form': form, 'message': message})
+
+    return render(request, 'auctions/listing_page.html', {'auction': auction, 'form': form})
 
 
 def watch_list(request):
